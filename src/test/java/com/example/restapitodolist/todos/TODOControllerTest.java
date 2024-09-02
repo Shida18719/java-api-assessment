@@ -81,4 +81,22 @@ public class TODOControllerTest {
 		verify(todoService).getAllTODOs();
     }
 
+    @Test
+    @Description("GET /api/todos/{id} - gets a TODO by id")
+    void getTODOById() throws URISyntaxException {
+        // Arrange
+        long id = 1;
+
+        when(todoService.getTODO(id)).thenReturn(defaultTODOs.get(0));
+
+        // Act
+        ResponseEntity<TODO> response = restTemplate.getForEntity(baseURI + "/" + id, TODO.class);
+        TODO responseTODO = response.getBody();
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(responseTODO);
+        assertEquals(defaultTODOs.get(0).getId(), responseTODO.getId());
+        verify(todoService).getTODO(id);
+    }
 }
